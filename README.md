@@ -1,3 +1,1 @@
-# Comparison GNB (Gausian Naive Bayes) With GNB optimizied with GA 
-
-This work is made to Engineering Thesis in AGH UST
+# Porównanie GNB (Gausian Naive Bayes) z GNB zoptymalizowanym za pomocą GA 
