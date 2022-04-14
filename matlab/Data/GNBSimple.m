@@ -44,8 +44,9 @@ classdef GNBSimple
             results = zeros(1, size(labels, 2));
 
             counts = simple_stats{:, 2};
+            all_count = height(sample_data);
 
-            for i= 1:height(sample_data)
+            for i= 1:all_count
                 row = sample_data(i, :);
                 search = string(row{1, group_by});
                 
@@ -57,6 +58,9 @@ classdef GNBSimple
                 else
                     results(label_id) = results(label_id);
                 end
+
+                pr = i./all_count .* 100;
+                disp(strcat("[*] Obliczenia: ", string(pr(1)), "%"));
             end
 
             statsTable = struct2table(struct( ...
