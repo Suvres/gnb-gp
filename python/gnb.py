@@ -12,7 +12,7 @@ def simple_gnb(dataset: pd.DataFrame, dataset_test: pd.DataFrame) -> pd.DataFram
     """
     Metoda wykorzystująca moduł sklearn, aby za pomocą Gaussian Naive Bayes wytrenować model za pomocą dataset.
     Następnie za pomocą dataset_test, przetestować model. Metoda zwraca wszystkie parametry związane z obliczeniami:
-    [dokładność, precyzję, wrażliwość, ocena, największa wykorzystana pamięć, czas trwania]
+    [dokładność, precyzję, czułość, ocena, największa wykorzystana pamięć, czas trwania]
 
     :param dataset:
     :param dataset_test:
