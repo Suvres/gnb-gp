@@ -20,6 +20,11 @@ def simple_gnb(dataset: pd.DataFrame, dataset_test: pd.DataFrame) -> pd.DataFram
     """
 
     # --- Wstępne informacje
+    print("\n")
+    print("=============================")
+    print("=== Klasyfikowanie danych ===")
+    print("=============================\n")
+
     print("\n == Wielkość plików dataset == \n")
     dataSize = read_b(dataset.memory_usage(index=False, deep=True).sum())
     dataTestSize = read_b(dataset_test.memory_usage(index=False, deep=True).sum())
