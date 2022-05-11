@@ -11,7 +11,7 @@ from random import choices, randint, randrange, random
 from typing import List, Callable, Tuple
 import pandas as pd
 import numpy as np
-from helper import result_log
+from helper import result_log, yellow_arrow, save_solution, print_stats
 
 from gnb import simple_gnb
 
@@ -90,22 +90,26 @@ def selection_pairs(population: Population, weights: List[float]) -> Population:
     )
 
 
-# Fitness
-# Poprawić, aby nie było samo F1
-def fitness(genome: Genome, columns: Columns, dataset: pd.DataFrame, dataset_test: pd.DataFrame) -> int:
-    if len(genome) != len(columns):
-        raise ValueError("Musi być ta sama długość")
-
+def calculate_simple(genome: Genome, columns: Columns, dataset: pd.DataFrame,
+                     dataset_test: pd.DataFrame) -> pd.DataFrame:
     logical_genome = [i == 1 for i in genome]
 
     tmp_columns = np.append(columns[logical_genome], label_column)
     tmp_dataset = dataset[tmp_columns]
     tmp_dataset_test = dataset_test[tmp_columns]
 
-    result = simple_gnb(dataset=tmp_dataset, dataset_test=tmp_dataset_test)
+    gnb_result = simple_gnb(dataset=tmp_dataset, dataset_test=tmp_dataset_test)
+    result_log(result=gnb_result, columns=tmp_columns)
+    return gnb_result
 
-    result_log(result=result, columns=tmp_columns)
-    return result.loc[0, "f1"]
+
+# Fitness
+def fitness(genome: Genome, columns: Columns, dataset: pd.DataFrame, dataset_test: pd.DataFrame) -> int:
+    if len(genome) != len(columns):
+        raise ValueError("Musi być ta sama długość")
+
+    calculate_result = calculate_simple(genome=genome, columns=columns, dataset=dataset, dataset_test=dataset_test)
+    return calculate_result.loc[0, "f1"]
 
 
 def population_sorted(population: Population, fitness_func: FitnessFunc) -> Tuple[Population, List[float]]:
@@ -159,6 +163,7 @@ def run_evolution(
     return population, i
 
 
+generations_limit = 100
 
 start = time.time()
 population, generations = run_evolution(
@@ -168,13 +173,22 @@ population, generations = run_evolution(
     fitness_func=partial(
         fitness, columns=columns, dataset=dataset, dataset_test=dataset_test
     ),
-    generation_limit=100,
+    generation_limit=generations_limit,
 )
 end = time.time()
 
-print(f"number of generations:  {generations}")
-print(f"best solution:  {genome_to_columns(population[0], columns)}")
-print(f"Time:  {end - start}s")
+print("\n\n ====================")
+print("==== Rezultat ====")
+print("====================\n\n")
+print(yellow_arrow + "Numer generacji: {0}/{1}".format(generations, generations_limit))
+print(yellow_arrow + "Najlepsze rozwiązanie: {0}".format(genome_to_columns(population[0], columns)))
+print(yellow_arrow + "Czas trwania: {0} s".format(end - start))
 
-result = fitness(population[0], columns=columns, dataset=dataset, dataset_test=dataset_test)
-print("\n{0:.4f}\n".format(result))
+result = calculate_simple(population[0], columns=columns, dataset=dataset, dataset_test=dataset_test)
+save_solution(columns)
+
+print("\n\n")
+print("===============================")
+print("==== Najlepsze rozwiązanie ====")
+print("===============================\n\n")
+print_stats(result)

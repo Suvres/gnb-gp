@@ -1,11 +1,10 @@
 import pandas as pd
-from read_b import read_b
 from sklearn.naive_bayes import GaussianNB
 from sklearn import metrics
 import time
 import tracemalloc
 import numpy as np
-from helper import yellow_arrow, green_star
+from helper import yellow_arrow, green_star, read_b
 
 
 def simple_gnb(dataset: pd.DataFrame, dataset_test: pd.DataFrame) -> pd.DataFrame:
