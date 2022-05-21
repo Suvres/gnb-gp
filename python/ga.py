@@ -26,8 +26,8 @@ PopulationSortedFunc = Callable[[Population, FitnessFunc], Tuple[Population, Lis
 CrossoverFunc = Callable[[Genome, Genome], Tuple[Genome, Genome]]
 MutationFunc = Callable[[Genome], Genome]
 
-dataset = pd.read_csv("../../dane_ids/train.csv")
-dataset_test = pd.read_csv("../../dane_ids/test.csv")
+dataset = pd.read_csv("../../dane_ids/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
+dataset_test = pd.read_csv("../../dane_ids/Wednesday-workingHours.pcap_ISCX.csv")
 
 columns = dataset.columns.tolist()
 label_column = columns[-1]
@@ -109,7 +109,7 @@ def fitness(genome: Genome, columns: Columns, dataset: pd.DataFrame, dataset_tes
         raise ValueError("Musi być ta sama długość")
 
     calculate_result = calculate_simple(genome=genome, columns=columns, dataset=dataset, dataset_test=dataset_test)
-    return calculate_result.loc[0, "f1"]
+    return calculate_result.loc[0, "accuracy"]
 
 
 def population_sorted(population: Population, fitness_func: FitnessFunc) -> Tuple[Population, List[float]]:
@@ -134,12 +134,12 @@ def run_evolution(
         mutation_fun: MutationFunc = mutation,
         population_sorted_fun: PopulationSortedFunc = population_sorted,
         generation_limit: int = 100,
-        limit: float = 0.9
+        limit: float = 0.861
 ) -> Tuple[Population, int]:
     population = populate_func()
 
     for i in range(generation_limit):
-        print("\n\n======= Populacja: {0} ========\n\n".format(i))
+        print("\n\n======= Populacja: {0} ========\n\n".format(i+1))
         population, weights = population_sorted_fun(population, fitness_func)
 
         if weights[0] > limit:
@@ -163,7 +163,7 @@ def run_evolution(
     return population, i
 
 
-generations_limit = 100
+generations_limit = 1000
 
 start = time.time()
 population, generations = run_evolution(
@@ -177,15 +177,15 @@ population, generations = run_evolution(
 )
 end = time.time()
 
-print("\n\n ====================")
+print("\n\n====================")
 print("==== Rezultat ====")
 print("====================\n\n")
-print(yellow_arrow + "Numer generacji: {0}/{1}".format(generations, generations_limit))
+print(yellow_arrow + "Numer generacji: {0}/{1}".format(generations+1, generations_limit))
 print(yellow_arrow + "Najlepsze rozwiązanie: {0}".format(genome_to_columns(population[0], columns)))
 print(yellow_arrow + "Czas trwania: {0} s".format(end - start))
 
 result = calculate_simple(population[0], columns=columns, dataset=dataset, dataset_test=dataset_test)
-save_solution(columns)
+save_solution(columns, population[0])
 
 print("\n\n")
 print("===============================")
