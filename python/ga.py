@@ -26,8 +26,8 @@ PopulationSortedFunc = Callable[[Population, FitnessFunc], Tuple[Population, Lis
 CrossoverFunc = Callable[[Genome, Genome], Tuple[Genome, Genome]]
 MutationFunc = Callable[[Genome], Genome]
 
-dataset = pd.read_csv("../../dane_ids/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
-dataset_test = pd.read_csv("../../dane_ids/Wednesday-workingHours.pcap_ISCX.csv")
+dataset = pd.read_csv("../../days/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
+dataset_test = pd.read_csv("../../days/Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv")
 
 columns = dataset.columns.tolist()
 label_column = columns[-1]
@@ -134,7 +134,7 @@ def run_evolution(
         mutation_fun: MutationFunc = mutation,
         population_sorted_fun: PopulationSortedFunc = population_sorted,
         generation_limit: int = 100,
-        limit: float = 0.861
+        limit: float = 0.9
 ) -> Tuple[Population, int]:
     population = populate_func()
 

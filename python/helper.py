@@ -12,18 +12,17 @@ def result_log(result: pd.DataFrame, columns):
     dt = datetime.now()
     date = dt.strftime('%Y-%m-%d %H:%M:%S')
     columns_names = ",".join(columns)
-    #
-    # log = "[{0}] columns: [{1}], " \
-    #       "accuracy: {2:.4f}, " \
-    #       "precision: {3:.4f}, " \
-    #       "recall: {4:.4f}, " \
-    #       "f1: {5:.4f}, " \
-    #       "peak: {6}," \
-    #       " time: {7:.2f}\n".format(date, columns_names, result.loc[0, "accuracy"],
-    #                                 result.loc[0, "precision"], result.loc[0, "recall"],
-    #                                 result.loc[0, "f1"], read_b(result.loc[0, "peak"]), result.loc[0, "time"])
 
-    log = "{0:.4f}\n".format(result.loc[0, "accuracy"])
+    log = "[{0}] columns: [{1}], " \
+          "accuracy: {2:.4f}, " \
+          "precision: {3:.4f}, " \
+          "recall: {4:.4f}, " \
+          "f1: {5:.4f}, " \
+          "peak: {6}," \
+          " time: {7:.2f}\n".format(date, columns_names, result.loc[0, "accuracy"],
+                                    result.loc[0, "precision"], result.loc[0, "recall"],
+                                    result.loc[0, "f1"], read_b(result.loc[0, "peak"]), result.loc[0, "time"])
+
     file = open('ga.log', 'a')
     file.write(log)
     file.close()
